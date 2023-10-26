@@ -2,8 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
+const cors = require('cors');
 
+// Add CORS header to all responses
+app.use(cors());
 // Set up static files and EJS for rendering HTML
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -29,9 +32,11 @@ db.on('error', (err) => {
 // Import and use Blood Bank and Blood Donor routes
 const bloodBankRoutes = require('./routes/bloodbankRoutes');
 const bloodDonorRoutes = require('./routes/blooddonorRoutes');
+const formDataSubmitRoutes = require('./routes/formDataSubmitRoutes');
 
 app.use('/bloodbanks', bloodBankRoutes);
 app.use('/donors', bloodDonorRoutes);
+app.use('/form', formDataSubmitRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
