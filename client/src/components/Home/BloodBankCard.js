@@ -1,74 +1,49 @@
-import React from 'react';
-import { Container, Card, Col, Row } from 'react-bootstrap';
-import ReactMapGL from 'react-map-gl';
-
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiamF5cGF0ZWwwMSIsImEiOiJjbG55cXVrNmswdnFjMmpuMDJzYjRrZ29xIn0.AYv00ub55MRP2o-p5ZLSWQ'; // Replace with your Mapbox access token
-
-const Marker = ({ longitude, latitude, text }) => (
-  <div style={{
-    color: 'white', 
-    background: 'red',
-    padding: '14px 10px',
-    display: 'inline-flex',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '100%',
-    transform: 'translate(-50%, -50%)'
-  }}>
-    {text}
-  </div>
-);
-
+import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Container, Card, Col, Row } from "react-bootstrap";
+import GoogleMapReact from "google-map-react";
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const BloodBankCard = () => {
-  const [viewport, setViewport] = React.useState({
-    latitude: 10.99835602,
-    longitude: 77.01502627,
-    zoom: 11,
-    width: '100%',
-    height: '100%',
-  });
+  const [bloodBanks, setBloodBanks] = useState([]);
 
-  const markers = [
-    // {latitude: 10.99835602, longitude: 77.01502627, name: "Marker 1"},
-    // {latitude: 10.99835603, longitude: 77.01502628, name: "Marker 2"},
-    // Add more markers as needed
-  ];
+  useEffect(() => {
+    axios
+      .get("http://localhost:9000/bloodbanks/op")
+      .then((res) => {
+        console.log("Faiz")
+        setBloodBanks(res.data.bloodBanks.slice(0, 5));
+      })
+      .catch((err) => {
+        console.log("error")
+         console.error(err);
+      });
+  }, []);
 
   return (
     <Container className="my-5">
       <Row>
         <Col md={6}>
-          <div style={{ height: '100%', width: '100%', overflow:"hidden", borderRadius: '30px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-            <ReactMapGL
-              {...viewport}
-              mapboxApiAccessToken={MAPBOX_TOKEN}
-              onViewportChange={viewport => {
-                setViewport(viewport);
-              }}
-            >
-              {markers.map((marker, index) => (
-                <Marker 
-                  key={index}
-                  longitude={marker.longitude}
-                  latitude={marker.latitude}
-                  text={marker.name}
-                />
-              ))}
-            </ReactMapGL>
-          </div>
+          <MapComponent />
         </Col>
         <Col md={6}>
-          <Card style={{ borderRadius: '30px', overflow: 'hidden' }}>
-            <Card.Header className="text-center py-4 fw-bold" style={{ fontSize: '32px', color: 'white', background: 'var(--red)' }}>
+          <Card style={{ borderRadius: "30px", overflow: "hidden" }}>
+            <Card.Header
+              className="text-center py-4 fw-bold"
+              style={{
+                fontSize: "32px",
+                color: "white",
+                background: "var(--red)",
+              }}
+            >
               Nearest Blood Banks
             </Card.Header>
             <Card.Body>
-              <CardSection name="Blood Bank 1" phone="1234567891" />
-              <CardSection name="Blood Bank 2" phone="9876543210" />
-              <CardSection name="Blood Bank 3" phone="5555555555" />
-              <CardSection name="Blood Bank 4" phone="9999999999" />
-              <CardSection name="Blood Bank 5" phone="1111111111" />
+              {console.log(bloodBanks)}
+              {bloodBanks.map((bloodBank) => (
+               
+                <CardSection name={bloodBank.name} phone={bloodBank.phone} />
+              ))}
             </Card.Body>
           </Card>
         </Col>
@@ -80,14 +55,55 @@ const BloodBankCard = () => {
 const CardSection = ({ name, phone }) => (
   <Row className="border-bottom px-3 py-3 border-bottom border-danger">
     <Col xs={1} className="d-flex align-items-center justify-content-center">
-      <i className="fas fa-user" style={{ fontSize: '26px', color: 'var(--dark-blue)' }}></i>
+      <i
+        className="fas fa-user"
+        style={{ fontSize: "26px", color: "var(--dark-blue)" }}
+      ></i>
     </Col>
     <Col xs={10}>
-      <span className="fw-bold pb-5" style={{ color: 'var(--red)', fontSize: '20px' }}>{name}</span>
+      <span
+        className="fw-bold pb-5"
+        style={{ color: "var(--red)", fontSize: "20px" }}
+      >
+        {name}
+      </span>
       <br />
-      <span><i className="fas fa-phone-alt" style={{ fontSize: '18px' }}></i> {phone}</span>
+      <span>
+        <i className="fas fa-phone-alt" style={{ fontSize: "18px" }}></i>{" "}
+        {phone}
+      </span>
     </Col>
   </Row>
 );
+
+const MapComponent = () => {
+  const defaultProps = {
+    center: {
+      lat: 10.99835602,
+      lng: 77.01502627,
+    },
+    zoom: 11,
+  };
+
+  return (
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        overflow: "hidden",
+        borderRadius: "30px", // Add border radius
+        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)", // Add shadow
+      }}
+    >
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: apiKey }} // Replace with your Google Maps API key
+        defaultCenter={defaultProps.center}
+        defaultZoom={defaultProps.zoom}
+      >
+        {/* You can add markers here if needed */}
+      </GoogleMapReact>
+    </div>
+  );
+};
 
 export default BloodBankCard;

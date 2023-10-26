@@ -1,57 +1,49 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const Table = () => {
+  const [bloodDonors, setBloodDonors] = useState([]);
+  const { cityId } = useParams(); // Access the cityId route parameter
+
+  useEffect(() => {
+    // Define the API URL based on the presence of cityId in the URL
+    const apiUrl = cityId
+      ? `http://localhost:9000/donors/check/${cityId}`
+      : 'http://localhost:9000/donors/check';
+
+    axios.get(apiUrl).then((response) => {
+      setBloodDonors(response.data.bloodDonors);
+    });
+  }, [cityId]);
+
+
+
   return (
     <div className='container'>
-    <table className="table table-striped table-hover mb-5 shadow" style={{ overflow: 'hidden', borderRadius: '40px' }}>
-      <thead>
-        <tr>
-          <th scope="col" className="text-white bg-danger">Sr no.</th>
-          <th scope="col" className="text-white bg-danger">Name</th>
-          <th scope="col" className="text-white bg-danger">Blood Group</th>
-          <th scope="col" className="text-white bg-danger">Location</th>
-          <th scope="col" className="text-white bg-danger">Contact</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Faiz Ansari</td>
-          <td>B+</td>
-          <td>Mumbai, Malad West</td>
-          <td><i class="fas fa-phone-alt"></i> 1234567891</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>John Doe</td>
-          <td>A-</td>
-          <td>Mumbai, Andheri</td>
-          <td><i class="fas fa-phone-alt"></i> 9876543210</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Jane Smith</td>
-          <td>O+</td>
-          <td>Mumbai, Borivali</td>
-          <td><i class="fas fa-phone-alt"></i> 5551234567</td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td>Alice Johnson</td>
-          <td>AB+</td>
-          <td>Mumbai, Malad East</td>
-          <td><i class="fas fa-phone-alt"></i> 7890123456</td>
-        </tr>
-        <tr>
-          <th scope="row">5</th>
-          <td>Bob Smith</td>
-          <td>B-</td>
-          <td>Mumbai, Thane</td>
-          <td><i class="fas fa-phone-alt"></i> 1112223333</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>  
+      <table className="table table-striped table-hover mb-5 shadow" style={{ overflow: 'hidden', borderRadius: '40px' }}>
+        <thead>
+          <tr>
+            <th scope="col" className="text-white bg-danger">Sr no.</th>
+            <th scope="col" className="text-white bg-danger">Name</th>
+            <th scope="col" className="text-white bg-danger">Blood Group</th>
+            <th scope="col" className="text-white bg-danger">Location</th>
+            <th scope="col" className="text-white bg-danger">Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bloodDonors.map((bloodDonor, index) => (
+            <tr key={index}>
+              <th scope="row">{index + 1}</th>
+              <td>{bloodDonor.Name}</td>
+             <td>{bloodDonor["Blood Group"]}</td>
+              <td>{bloodDonor.Location}</td>
+              <td><i class="fas fa-phone-alt"></i> {bloodDonor.Contact}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
