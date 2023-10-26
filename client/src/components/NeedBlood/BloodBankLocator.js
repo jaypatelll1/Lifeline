@@ -1,17 +1,25 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import GoogleMapReact from 'google-map-react';
+import { Link, useParams } from 'react-router-dom';
+import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-const BloodBankLocator = () => {
+const BloodBankLocator = (props) => {
   const [cities, setCities] = useState([]);
   const [selectedCityId, setSelectedCityId] = useState('');
-  const navigate = useNavigate(); // Hook for programmatic navigation
-  const { cityId } = useParams(); // Access the city parameter from the URL
+  const { cityId } = useParams();
+
+  useEffect(() => {
+    axios.get('http://localhost:9000/donors/check/cities').then((response) => {
+      setCities(response.data.cities);
+    });
+
+    if (cityId) {
+      setSelectedCityId(cityId);
+    }
+  }, [cityId]);
 
   const defaultProps = {
     center: {
@@ -21,18 +29,14 @@ const BloodBankLocator = () => {
     zoom: 11,
   };
 
-  useEffect(() => {
-    axios.get('http://localhost:9000/donors/check/cities').then((response) => {
-      setCities(response.data.cities);
-    });
-  }, []);
-
-  useEffect(() => {
-    // If the cityId parameter is present in the URL, set it in the state
-    if (cityId) {
-      setSelectedCityId(cityId);
-    }
-  }, [cityId]);
+  const mapStyles = {
+    width: "100%",
+    height: "100%",
+    position: "relative", // Ensure that the map stays within its container
+    borderRadius: "30px",
+    overflow: "hidden",
+    boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+  };
 
   return (
     <div className="container-fluid my-5" style={{ background: 'linear-gradient(180deg, rgba(234, 65, 86, 0.15) 0%, rgba(234, 65, 86, 0.03) 100%)' }}>
@@ -40,11 +44,20 @@ const BloodBankLocator = () => {
         <div className="row flex-col d-flex align-items-top justify-content-between py-5">
           {/* Maps */}
           <div className="col-7 maps">
-            <div style={{ height: '100%', width: '100%', overflow: 'hidden', borderRadius: '30px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-              <GoogleMapReact bootstrapURLKeys={{ key: apiKey }} defaultCenter={defaultProps.center} defaultZoom={defaultProps.zoom}>
+            <div style={mapStyles}>
+              <Map
+                google={props.google}
+                zoom={defaultProps.zoom}
+                initialCenter={defaultProps.center}
+                style={mapStyles}
+              >
                 {/* You can add markers here if needed */}
-                <AnyReactComponent lat={10.99835602} lng={77.01502627} text="My Marker" />
-              </GoogleMapReact>
+                <Marker
+                  title="My Marker"
+                  name="My Marker"
+                  position={{ lat: 10.99835602, lng: 77.01502627 }}
+                />
+              </Map>
             </div>
           </div>
 
@@ -89,4 +102,6 @@ const BloodBankLocator = () => {
   );
 };
 
-export default BloodBankLocator;
+export default GoogleApiWrapper({
+  apiKey: apiKey,
+})(BloodBankLocator);
