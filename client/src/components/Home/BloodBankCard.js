@@ -8,11 +8,11 @@ const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const BloodBankCard = (props) => {
   const [bloodBanks, setBloodBanks] = useState([
-    { name: "Blood Bank 1", lat: 10.99835602, lng: 77.01502627, phone: "123-456-7890" },
-    { name: "Blood Bank 2", lat: 11.99845602, lng: 77.01512627, phone: "987-654-3210" },
-    { name: "Blood Bank 3", lat: 12.99855602, lng: 77.01522627, phone: "555-555-5555" },
-    { name: "Blood Bank 4", lat: 13.99865602, lng: 77.01532627, phone: "777-777-7777" },
-    { name: "Blood Bank 5", lat: 14.99875602, lng: 77.01542627, phone: "999-999-9999" },
+    { name: "Malad Blood Bank", lat: 19.214618, lng: 72.887196, phone: "022 2844 5678" },
+    { name: "Suburban Hitech Blood Bank", lat: 19.214618, lng: 72.887196, phone:  "022 2871 4070" },
+    { name: "Prabodhan Blood Bank", lat: 19.190636, lng: 72.834353, phone: "555-555-5555" },
+    { name: "Goregaon Blood Bank", lat: 19.193718, lng: 72.835463, phone:  "022 2633 1323" },
+    { name: "Hiranandani Hospital and Research Centre Blood Bank", lat: 19.129861, lng: 72.834217, phone:  "022 2844 1449" },
   ]);
 
   return (
@@ -55,16 +55,16 @@ const CardSection = ({ name, phone }) => (
     
     <Col xs={12}>
       <span
-        className="fw-bold d-flex align-items-center ms-4"
-        style={{ color: "var(--red)", fontSize: "18px" }}
+        className="d-flex align-items-center ms-4 py-2"
+        style={{ color: "var(--red)", fontSize: "18px" , fontWeight: "500"}}
       >
         <Image src={bloodBankSymbol} style={{ width: '20px' }} className="me-3"/>
         {name}
       </span>
-      <span className=' ms-4'>
+      <a href={"tel:"+phone} className=' ms-4'>
       <Image src={Telephone} style={{ width: '20px' }} className="me-3"/>
         {phone}
-      </span>
+      </a>
     </Col>
   </Row>
 );

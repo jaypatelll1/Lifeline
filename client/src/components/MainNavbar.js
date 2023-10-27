@@ -24,7 +24,7 @@ const NavigationBar = () => {
     <Navbar bg="white" variant="light" expand="lg" style={{ height: '75px' }}>
       <Container>
         <Navbar.Brand as={Link} to="/">
-          <Image src={Logoblack} alt="LOGO" style={{ width: '200px' }} fluid />
+          <Image src={Logoblack} alt="LOGO" style={{ width: '160px' }} fluid />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav " className='nav-alignment'>

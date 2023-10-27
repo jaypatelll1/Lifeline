@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Card, Form, Button } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -53,7 +53,7 @@ const MapsAndForms = (props) => {
   const [cities, setCities] = useState([]);
   const [selectedCityId, setSelectedCityId] = useState("");
   const { cityId } = useParams();
-  const [selectedBloodBank, setSelectedBloodBank] = useState(null);
+  // const [selectedBloodBank, setSelectedBloodBank] = useState(null);
   const [bloodBanks, setBloodBanks] = useState([]);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const MapsAndForms = (props) => {
     <div className="container-fluid" style={{ background: "linear-gradient(180deg, rgba(234, 65, 86, 0.15) 0%, rgba(234, 65, 86, 0.03) 100%" }}>
       <div className="container">
         <div className="row flex-col d-flex align-items-top justify-content-between">
-          <div className="maps col-7 my-5">
+          <div className="maps col-7 my-5" style={{height:"400px"}}>
             <MapComponent google={props.google} />
           </div>
 
@@ -105,8 +105,8 @@ const MapsAndForms = (props) => {
             <h5 className="card-header text-center py-4 fw-bold" style={{ fontSize: "26px", color: "white", background: "var(--red)" }}>
               Nearest Blood Bank
             </h5>
-            <div className="card-body my-4 mx-3">
-              <form className="blood-donor-form">
+            <div className="card-body my-4 mx-3 d-flex align-items-center justify-content-center">
+              <form className="blood-donor-form w-100">
                 <select className="form-select mb-4" aria-label="Default select example" value={selectedCityId} onChange={handleCityChange}>
                   <option value="" disabled>City</option>
                   {cities.map((city) => (
@@ -120,7 +120,7 @@ const MapsAndForms = (props) => {
                   type="submit"
                   as={Link}
                   to={`/donateblood/${selectedCityId}`}
-                  className="btn btn-danger rounded-pill py-2 px-3 mt-4"
+                  className="btn btn-danger rounded-pill w-auto py-2 px-3 mt-4"
                   onClick={(e) => {
                     if (!selectedCityId) {
                       e.preventDefault();

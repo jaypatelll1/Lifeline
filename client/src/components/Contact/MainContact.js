@@ -1,5 +1,4 @@
 import React from 'react';
-import DonateBlood from '../../assets/DonateBloodPageBanner.jpg';
 import { Image } from 'react-bootstrap';
 import Location from '../../assets/location.png';
 import Email from '../../assets/email.png';
@@ -53,7 +52,7 @@ const MainContact = () => {
         <a
           href="https://goo.gl/maps/1UpmQLkF6qrzwFbh9"
           target="_blank"
-          className="contact-info-box col-12 col-lg-3 col-md-5"
+          className="contact-info-box col-12 col-lg-3 col-md-5" rel="noreferrer"
         >
           <div className="card border border-0">
             <div className="card-body">

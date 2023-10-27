@@ -66,7 +66,7 @@ const BloodBankLocator = (props) => {
       <div className="container my-5">
         <div className="row flex-col d-flex align-items-top justify-content-between py-5">
           {/* Maps */}
-          <div className="col-7 maps">
+          <div className="col-7 maps" >
             <div style={mapStyles}>
               <Map
                 google={props.google}
