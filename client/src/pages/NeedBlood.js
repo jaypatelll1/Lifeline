@@ -3,14 +3,15 @@ import Hero from "../components/NeedBlood/Hero";
 import MainNavbar from "../components/MainNavbar";
 import Table from "../components/NeedBlood/Table";
 import Footer from "../components/Footer";
-import BloodBankLocator from "../components/NeedBlood/BloodBankLocator";
+
 import "../App.css";
+import MapsAndForms from "../components/DonateBlood/MapsAndForms";
 const NeedBlood = () => {
   return (
     <>
       <MainNavbar />
       <Hero />
-      <BloodBankLocator />
+      <MapsAndForms />
       <Table />
       <Footer />
     </>

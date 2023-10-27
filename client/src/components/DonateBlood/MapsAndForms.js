@@ -6,7 +6,7 @@ import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-
+const coordinatesArray = []; // Define coordinatesArray at the module level
 
 const MapComponent = (props) => {
   const defaultProps = {
@@ -20,11 +20,21 @@ const MapComponent = (props) => {
   const mapStyle = {
     width: "100%",
     height: "100%",
-    position: "relative", // Ensure that the map stays within its container
+    position: "relative",
     borderRadius: "30px",
     overflow: "hidden",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
   };
+
+  // Add markers using the coordinates from coordinatesArray
+  const markers = coordinatesArray.map((coordinate, index) => (
+    <Marker
+      key={index}
+      title="Blood Bank"
+      name="Blood Bank"
+      position={{ lat: coordinate.latitude, lng: coordinate.longitude }}
+    />
+  ));
 
   return (
     <div style={mapStyle}>
@@ -33,12 +43,7 @@ const MapComponent = (props) => {
         initialCenter={defaultProps.center}
         zoom={defaultProps.zoom}
       >
-        {/* You can add markers here if needed */}
-        <Marker
-          title="My Marker"
-          name="My Marker"
-          position={{ lat: 10.99835602, lng: 77.01502627 }}
-        />
+        {markers}
       </Map>
     </div>
   );
@@ -46,9 +51,10 @@ const MapComponent = (props) => {
 
 const MapsAndForms = (props) => {
   const [cities, setCities] = useState([]);
-  const [selectedCityId, setSelectedCityId] = useState(""); // Use selectedCityId to control the selected value
-  const navigate = useNavigate();
+  const [selectedCityId, setSelectedCityId] = useState("");
   const { cityId } = useParams();
+  const [selectedBloodBank, setSelectedBloodBank] = useState(null);
+  const [bloodBanks, setBloodBanks] = useState([]);
 
   useEffect(() => {
     axios.get("http://localhost:9000/donors/check/cities").then((response) => {
@@ -62,12 +68,33 @@ const MapsAndForms = (props) => {
     }
   }, [cityId]);
 
+  useEffect(() => {
+    const apiUrl = cityId
+      ? `http://localhost:9000/bloodbanks/op/${cityId}`
+      : "http://localhost:9000/bloodbanks/op";
+
+    axios.get(apiUrl)
+      .then((response) => {
+        setBloodBanks(response.data.bloodBanks);
+        // Extract coordinates and set in the state
+        const coordinates = response.data.bloodBanks.map((bloodBank) => ({
+          latitude: bloodBank.latitude,
+          longitude: bloodBank.longitude,
+        }));
+        coordinatesArray.length = 0; // Clear the array
+        coordinatesArray.push(...coordinates); // Push new coordinates
+      })
+      .catch((error) => {
+        console.error("Error fetching blood banks:", error);
+      });
+  }, [cityId]);
+
   const handleCityChange = (event) => {
-    setSelectedCityId(event.target.value); // Update selectedCityId when the user selects a city
+    setSelectedCityId(event.target.value);
   };
 
   return (
-    <div className="container-fluid" style={{ background: "linear-gradient(180deg, rgba(234, 65, 86, 0.15) 0%, rgba(234, 65, 86, 0.03) 100%)" }}>
+    <div className="container-fluid" style={{ background: "linear-gradient(180deg, rgba(234, 65, 86, 0.15) 0%, rgba(234, 65, 86, 0.03) 100%" }}>
       <div className="container">
         <div className="row flex-col d-flex align-items-top justify-content-between">
           <div className="maps col-7 my-5">
@@ -96,7 +123,7 @@ const MapsAndForms = (props) => {
                   className="btn btn-danger rounded-pill py-2 px-3 mt-4"
                   onClick={(e) => {
                     if (!selectedCityId) {
-                      e.preventDefault(); // Prevent form submission if city is not selected
+                      e.preventDefault();
                     }
                   }}
                 >
