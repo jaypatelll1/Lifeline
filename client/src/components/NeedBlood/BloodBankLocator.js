@@ -4,7 +4,7 @@ import { Card, Form, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
-const apiKey = "AIzaSyC3iJURjh-QSiibBC8Yf9SMYQ5yeL3UcDQ";
+const apiKey = "";
 
 const BloodBankLocator = (props) => {
   const [cities, setCities] = useState([]);
