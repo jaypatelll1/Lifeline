@@ -1,7 +1,7 @@
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const app = express();
 const PORT = process.env.PORT || 9000;
 const cors = require('cors');
 
@@ -36,7 +36,7 @@ const formDataSubmitRoutes = require('./routes/formDataSubmitRoutes');
 
 app.use('/bloodbanks', bloodBankRoutes);
 app.use('/donors', bloodDonorRoutes);
-app.use('/form', formDataSubmitRoutes);
+app.use('/form/submit', formDataSubmitRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

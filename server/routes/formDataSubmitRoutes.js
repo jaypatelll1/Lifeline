@@ -15,20 +15,18 @@ const bloodSchema = new mongoose.Schema({
 });
 
 const Blood = mongoose.model('Blood', bloodSchema);
-console.log("yes")
 // Handle form submission
-app.get('/submit', async (req, res) => {
+router.post('/', async (req, res) => {
   const formData = req.body;
-  // const newDonor = new Blood(formData);
+  const newDonor = new Blood(formData);
 
-  // try {
-  //   await newDonor.save();
-  //   res.send('Data saved successfully.');
-  // } catch (err) {
-  //   console.error(err);
-  //   res.send('Error saving data.');
-  // }
-  res.json("Faiz");
+  try {
+    await newDonor.save();
+    res.send('Data saved successfully.');
+  } catch (err) {
+    console.error(err);
+    res.send('Error saving data.');
+  }
 });
 
 module.exports = router;

@@ -1,25 +1,43 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function GetDonorInfoForm() {
   const [formData, setFormData] = useState({
-    name: '',
-    bloodGroup: '',
-    email: '',
-    phone: '',
-    address: ''
+    name: "",
+    bloodGroup: "",
+    email: "",
+    phone: "",
+    address: "",
   });
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       // Make POST request using Axios
-      const response = await axios.post('http://localhost:9000/form/submit', formData);
+      const response = await axios.post(
+        "http://localhost:9000/form/submit",
+        formData
+      );
       console.log(response.data); // Log the response from the server
-      // Handle success, e.g., show a success message to the user
+      setSuccessMessage("Data saved successfully");
+      setErrorMessage("");
+
+      // Clear the form fields
+      setFormData({
+        name: "",
+        bloodGroup: "",
+        email: "",
+        phone: "",
+        address: "",
+      });
     } catch (error) {
-      console.error('Error submitting form:', error);
-      // Handle error, e.g., show an error message to the user
+      console.error("Error submitting form:", error);
+      setErrorMessage("Error saving data");
+      setSuccessMessage("");
     }
   };
 
@@ -29,10 +47,19 @@ export default function GetDonorInfoForm() {
   };
 
   return (
-    <div className="container card p-0 shadow my-5" style={{ borderRadius: '30px', overflow: 'hidden' }}>
-      <h5 className="card-header text-center py-4 fw-bold" style={{ fontSize: '32px', color: 'white', background: 'var(--red)' }}> Fill Your Details to Donate Blood</h5>
+    <div
+      className="container card p-0 shadow my-5"
+      style={{ borderRadius: "30px", overflow: "hidden" }}
+    >
+      <h5
+        className="card-header text-center py-4 fw-bold"
+        style={{ fontSize: "32px", color: "white", background: "var(--red)" }}
+      >
+        {" "}
+        Fill Your Details to Donate Blood
+      </h5>
       <div className="card-body my-4 mx-3">
-        <form className='py-3' onSubmit={handleSubmit}>
+        <form className="py-3" onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="exampleInputname" className="form-label">
               Full Name
@@ -116,7 +143,18 @@ export default function GetDonorInfoForm() {
               required
             ></textarea>
           </div>
-          <button type="submit" className="btn btn-danger rounded-pill py-2 px-3 mt-4">Submit</button>
+          <button
+            type="submit"
+            className="btn btn-danger rounded-pill py-2 px-3 mt-4"
+          >
+            Submit
+          </button>
+          {successMessage && (
+            <div className="alert alert-success my-3">{successMessage}</div>
+          )}
+          {errorMessage && (
+            <div className="alert alert-danger my-3">{errorMessage}</div>
+          )}
         </form>
       </div>
     </div>
