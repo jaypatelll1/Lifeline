@@ -75,7 +75,7 @@ const MapsAndForms = (props) => {
           </div>
 
           <div className="col-4 card p-0 shadow my-5" style={{ borderRadius: "30px", overflow: "hidden" }}>
-            <h5 className="card-header text-center py-4 fw-bold" style={{ fontSize: "32px", color: "white", background: "var(--red)" }}>
+            <h5 className="card-header text-center py-4 fw-bold" style={{ fontSize: "26px", color: "white", background: "var(--red)" }}>
               Nearest Blood Bank
             </h5>
             <div className="card-body my-4 mx-3">

@@ -53,7 +53,7 @@ export default function GetDonorInfoForm() {
     >
       <h5
         className="card-header text-center py-4 fw-bold"
-        style={{ fontSize: "32px", color: "white", background: "var(--red)" }}
+        style={{ fontSize: "26px", color: "white", background: "var(--red)" }}
       >
         {" "}
         Fill Your Details to Donate Blood

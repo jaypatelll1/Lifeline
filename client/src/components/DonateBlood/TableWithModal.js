@@ -40,7 +40,7 @@ const TableWithModal = () => {
       >
         <thead>
           <tr>
-            <th scope="col" className="text-white bg-danger">
+            <th scope="col" className="text-white bg-danger" style={{width:"120px"}}>
               Sr no.
             </th>
             <th scope="col" className="text-white bg-danger">
@@ -49,7 +49,7 @@ const TableWithModal = () => {
             <th scope="col" className="text-white bg-danger">
               Phone no.
             </th>
-            <th scope="col" className="text-white bg-danger">
+            <th scope="col" className="text-white bg-danger" style={{width:"230px"}}>
               More Detail
             </th>
           </tr>
@@ -81,7 +81,7 @@ const TableWithModal = () => {
           <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div className="modal-content">
               <div className="modal-header">
-                <h1 className="modal-title fs-5">More Details</h1>
+                <h1 className="modal-title fs-5 fw-bold">More Details About Blood Bank</h1>
                 <button
                   type="button"
                   className="btn-close"
@@ -90,7 +90,7 @@ const TableWithModal = () => {
                 ></button>
               </div>
               <div className="modal-body">
-                <table className="table table-bordered border-danger">
+                <table className="table table-bordered border-danger shadow">
                   <tbody>
                     <tr>
                       <th scope="row">BB Name</th>

@@ -97,12 +97,12 @@ const BloodBankLocator = (props) => {
             <Card.Header
               className="text-center py-4 fw-bold"
               style={{
-                fontSize: "32px",
+                fontSize: "26px",
                 color: "white",
                 background: "var(--red)",
               }}
             >
-              Nearest Blood Bank
+              Nearest Blood Donor
             </Card.Header>
             <Card.Body className="my-4 mx-3">
               <Form className="blood-donor-form">
