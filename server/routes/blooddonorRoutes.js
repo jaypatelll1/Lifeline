@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const Cordinates = require('../models/cordinates');
 const router = express.Router();
 const BloodDonor = require('../models/Donor'); // Replace 'Donor' with 'Blood'
 const City = require('../models/city'); 
@@ -42,9 +42,9 @@ router.get('/check/:city?', async (req, res) => {
       // console.log( city.toJSON()['Blood Group'])
     }
 
-
+    const cordinates = await Cordinates.find();
     // res.render('donorsPage', { bloodDonors, cities,newcities,name,contact,location,blood }); // Update the variable name to 'bloodDonors'
-    res.json({ bloodDonors, cities,newcities,name,contact,location,blood });
+    res.json({ bloodDonors, cities,newcities,name,contact,location,blood, cordinates});
   } catch (err) {
     console.error(err);
     res.status(500).send('Error retrieving blood donors');
