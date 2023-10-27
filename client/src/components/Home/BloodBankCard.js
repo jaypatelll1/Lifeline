@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Col, Row } from 'react-bootstrap';
+import { Container, Card, Col, Row, Image } from 'react-bootstrap';
+import bloodBankSymbol from "../../assets/blood-bank-symbol.png";
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+import Telephone from '../../assets/telephone.png';
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -20,18 +22,19 @@ const BloodBankCard = (props) => {
           <MapComponent google={props.google} bloodBanks={bloodBanks} />
         </Col>
         <Col md={6}>
-          <Card style={{ borderRadius: "30px", overflow: "hidden" }}>
+          <Card style={{ borderRadius: "30px", overflow: "hidden" }} className='shadow border-1 border-danger'>
             <Card.Header
-              className="text-center py-4 fw-bold"
+              className="text-center py-3 fw-bold"
               style={{
-                fontSize: "32px",
+                fontSize: "26px",
                 color: "white",
                 background: "var(--red)",
+                letterSpacing: "2px",
               }}
             >
               Nearest Blood Banks
             </Card.Header>
-            <Card.Body>
+            <Card.Body className="p-0">
               {bloodBanks.map((bloodBank, index) => (
                 <CardSection
                   key={index}
@@ -49,22 +52,17 @@ const BloodBankCard = (props) => {
 
 const CardSection = ({ name, phone }) => (
   <Row className="border-bottom px-3 py-3 border-bottom border-danger">
-    <Col xs={1} className="d-flex align-items-center justify-content-center">
-      <i
-        className="fas fa-user"
-        style={{ fontSize: "26px", color: "var(--dark-blue)" }}
-      ></i>
-    </Col>
-    <Col xs={10}>
+    
+    <Col xs={12}>
       <span
-        className="fw-bold pb-5"
-        style={{ color: "var(--red)", fontSize: "20px" }}
+        className="fw-bold d-flex align-items-center ms-4"
+        style={{ color: "var(--red)", fontSize: "18px" }}
       >
+        <Image src={bloodBankSymbol} style={{ width: '20px' }} className="me-3"/>
         {name}
       </span>
-      <br />
-      <span>
-        <i className="fas fa-phone-alt" style={{ fontSize: "18px" }}></i>{" "}
+      <span className=' ms-4'>
+      <Image src={Telephone} style={{ width: '20px' }} className="me-3"/>
         {phone}
       </span>
     </Col>
