@@ -4,16 +4,30 @@ import { Card, Form, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+const apiKey = "AIzaSyC3iJURjh-QSiibBC8Yf9SMYQ5yeL3UcDQ";
 
 const BloodBankLocator = (props) => {
   const [cities, setCities] = useState([]);
   const [selectedCityId, setSelectedCityId] = useState('');
   const { cityId } = useParams();
+  const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
+    // Fetch cities and markers
     axios.get('http://localhost:9000/donors/check/cities').then((response) => {
       setCities(response.data.cities);
+      
+      // console.log(response.data.cordinates);         
+      // Assuming response.data.cordinates is the array of coordinates
+const coordinates = response.data.cordinates;
+
+coordinates.forEach((coordinate, index) => {
+  const latitude = coordinate.latitude;
+  const longitude = coordinate.longitude;
+  console.log(`Coordinate ${index + 1}: Latitude ${latitude}, Longitude ${longitude}`);
+  setMarkers(coordinates);
+});
+
     });
 
     if (cityId) {
@@ -23,8 +37,8 @@ const BloodBankLocator = (props) => {
 
   const defaultProps = {
     center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
+      lat: 19.4553598,
+      lng: 73.4550915,
     },
     zoom: 11,
   };
@@ -32,7 +46,7 @@ const BloodBankLocator = (props) => {
   const mapStyles = {
     width: "100%",
     height: "100%",
-    position: "relative", // Ensure that the map stays within its container
+    position: "relative",
     borderRadius: "30px",
     overflow: "hidden",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -45,19 +59,22 @@ const BloodBankLocator = (props) => {
           {/* Maps */}
           <div className="col-7 maps">
             <div style={mapStyles}>
-              <Map
-                google={props.google}
-                zoom={defaultProps.zoom}
-                initialCenter={defaultProps.center}
-                style={mapStyles}
-              >
-                {/* You can add markers here if needed */}
-                <Marker
-                  title="My Marker"
-                  name="My Marker"
-                  position={{ lat: 10.99835602, lng: 77.01502627 }}
-                />
-              </Map>
+            <Map
+  google={props.google}
+  zoom={defaultProps.zoom}
+  initialCenter={defaultProps.center}
+  style={mapStyles}
+>
+  {markers.map((marker, index) => (
+    <Marker
+      key={index}
+      title={`Marker ${index}`}
+      name={`Marker ${index}`}
+      position={{ lat: parseFloat(marker.latitude), lng: parseFloat(marker.longitude) }}
+    />
+  ))}
+</Map>
+
             </div>
           </div>
 
