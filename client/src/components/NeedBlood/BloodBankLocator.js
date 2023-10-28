@@ -40,8 +40,8 @@ const BloodBankLocator = (props) => {
 
   const defaultProps = {
     center: {
-      lat: 19.4553598,
-      lng: 73.4550915,
+      lat: 19.076090, 
+      lng: 72.877426
     },
     zoom: 11,
   };

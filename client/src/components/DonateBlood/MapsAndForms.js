@@ -11,8 +11,8 @@ const coordinatesArray = []; // Define coordinatesArray at the module level
 const MapComponent = (props) => {
   const defaultProps = {
     center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
+      lat: 19.076090, 
+      lng: 72.877426
     },
     zoom: 11,
   };

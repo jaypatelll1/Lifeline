@@ -5,7 +5,7 @@ import Table from "../components/NeedBlood/Table";
 import Footer from "../components/Footer";
 
 import "../App.css";
-import MapsAndForms from "../components/DonateBlood/MapsAndForms";
+import MapsAndForms from "../components/NeedBlood/BloodBankLocator";
 const NeedBlood = () => {
   return (
     <>

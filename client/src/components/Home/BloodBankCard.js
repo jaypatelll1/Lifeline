@@ -14,7 +14,6 @@ const BloodBankCard = (props) => {
     { name: "Goregaon Blood Bank", lat: 19.193718, lng: 72.835463, phone:  "022 2633 1323" },
     { name: "Hiranandani Hospital and Research Centre Blood Bank", lat: 19.129861, lng: 72.834217, phone:  "022 2844 1449" },
   ]);
-
   return (
     <Container className="my-5">
       <Row>
@@ -72,8 +71,8 @@ const CardSection = ({ name, phone }) => (
 const MapComponent = (props) => {
   const defaultProps = {
     center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
+      lat: 19.076090, 
+      lng: 72.877426
     },
     zoom: 11,
   };
