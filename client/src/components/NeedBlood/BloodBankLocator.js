@@ -4,7 +4,7 @@ import { Card, Form, Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;;
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const BloodBankLocator = (props) => {
   const [cities, setCities] = useState([]);
@@ -13,34 +13,45 @@ const BloodBankLocator = (props) => {
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-    // Fetch cities and markers
-    axios.get("http://localhost:9000/donors/check/cities").then((response) => {
-      setCities(response.data.cities);
-
-      // console.log(response.data.cordinates);
-      // Assuming response.data.cordinates is the array of coordinates
-      const coordinates = response.data.cordinates;
-
-      coordinates.forEach((coordinate, index) => {
-        const latitude = coordinate.latitude;
-        const longitude = coordinate.longitude;
-        console.log(
-          `Coordinate ${
-            index + 1
-          }: Latitude ${latitude}, Longitude ${longitude}`
-        );
-        setMarkers(coordinates);
+    // Fetch cities
+    axios.get("http://localhost:9000/donors/check/cities")
+      .then((response) => {
+        // Ensure cities is an array
+        const fetchedCities = response.data?.cities || [];
+        setCities(fetchedCities);
+        console.log(fetchedCities)
+      })
+      .catch(err => {
+        console.error('Error fetching cities:', err);
       });
-    });
 
     if (cityId) {
       setSelectedCityId(cityId);
+      fetchMarkers(cityId);
     }
   }, [cityId]);
 
+  const fetchMarkers = (city) => {
+    axios.get(`http://localhost:9000/donors/check/markers/${city}`)
+      .then((response) => {
+        // Ensure coordinates is an array
+        const fetchedCoordinates = response.data?.cordinates || [];
+        setMarkers(fetchedCoordinates);
+      })
+      .catch(err => {
+        console.error('Error fetching markers:', err);
+      });
+  };
+
+  const handleCityChange = (event) => {
+    const newCityId = event.target.value;
+    setSelectedCityId(newCityId);
+    fetchMarkers(newCityId);
+  };
+
   const defaultProps = {
     center: {
-      lat: 19.076090, 
+      lat: 19.076090,
       lng: 72.877426
     },
     zoom: 11,
@@ -66,7 +77,7 @@ const BloodBankLocator = (props) => {
       <div className="container my-5">
         <div className="row flex-col d-flex align-items-top justify-content-between py-5">
           {/* Maps */}
-          <div className="col-7 maps" >
+          <div className="col-7 maps">
             <div style={mapStyles}>
               <Map
                 google={props.google}
@@ -111,15 +122,19 @@ const BloodBankLocator = (props) => {
                   <Form.Select
                     className="form-select mb-4"
                     aria-label="Default select example"
-                    onChange={(event) => setSelectedCityId(event.target.value)}
+                    onChange={handleCityChange}
                     value={selectedCityId}
                   >
-                    <option value="">City</option>
-                    {cities.map((city) => (
-                      <option key={city.city} value={city.city}>
-                        {city.city}
-                      </option>
-                    ))}
+                    <option value="">Select City</option>
+                    {cities.length > 0 ? (
+                      cities.map((city, index) => (
+                        <option key={index} value={city.city}>
+                          {city.city}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">No cities available</option>
+                    )}
                   </Form.Select>
 
                   <Button

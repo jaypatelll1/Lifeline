@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const districtSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,7 +8,6 @@ const districtSchema = new mongoose.Schema({
   },
   
 });
-
 
 const District = mongoose.model('District', districtSchema);
 
