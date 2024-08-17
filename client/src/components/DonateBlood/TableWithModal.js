@@ -1,46 +1,72 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const TableWithModal = () => {
+  const [bloodBanks, setBloodBanks] = useState([]);
+  const [selectedBloodBank, setSelectedBloodBank] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedBloodBank, setSelectedBloodBank] = useState(null); // State to track the selected blood bank
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [banksPerPage] = useState(10);
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const { cityId } = useParams(); // Access the cityId route parameter
-
-  const [bloodBanks, setBloodBanks] = useState([]); // Fixed typo here
+  const { cityId } = useParams();
 
   useEffect(() => {
-    // Define the API URL based on the presence of cityId in the URL
-    const apiUrl = cityId
-      ? `http://localhost:9000/bloodbanks/op/${cityId}`
-      : "http://localhost:9000/bloodbanks/op";
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const apiUrl = cityId
+          ? `http://localhost:9000/bloodbanks/op/${cityId}?page=${currentPage}&limit=${banksPerPage}`
+          : `http://localhost:9000/bloodbanks/op?page=${currentPage}&limit=${banksPerPage}`;
 
-    axios.get(apiUrl).then((response) => {
-      setBloodBanks(response.data.bloodBanks); // Fixed typo here
-    });
+        const response = await axios.get(apiUrl);
+        setBloodBanks(response.data.bloodBanks);
+        setTotalPages(response.data.pagination.totalPages);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [cityId, currentPage, banksPerPage]);
+
+  useEffect(() => {
+    // Reset to page 1 when cityId changes
+    setCurrentPage(1);
   }, [cityId]);
 
-  // Function to handle when a row is clicked
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   const handleRowClick = (bloodBank) => {
     setSelectedBloodBank(bloodBank);
-    toggleModal();
+    setShowModal(true);
+    document.body.classList.add('modal-open');
+  };
+
+  const toggleModal = () => {
+    setShowModal(false);
+    document.body.classList.remove('modal-open');
   };
 
   return (
     <div className="container mb-5">
-      {/* Table */}
       <table
         className="table table-striped table-hover my-5 shadow"
-        style={{ overflow: "hidden", borderRadius: "40px" }}
+        style={{ overflow: 'hidden', borderRadius: '40px' }}
       >
         <thead>
           <tr>
-            <th scope="col" className="text-white bg-danger" style={{width:"120px"}}>
+            <th scope="col" className="text-white bg-danger" style={{ width: '120px' }}>
               Sr no.
             </th>
             <th scope="col" className="text-white bg-danger">
@@ -49,34 +75,68 @@ const TableWithModal = () => {
             <th scope="col" className="text-white bg-danger">
               Phone no.
             </th>
-            <th scope="col" className="text-white bg-danger" style={{width:"230px"}}>
+            <th scope="col" className="text-white bg-danger" style={{ width: '230px' }}>
               More Detail
             </th>
           </tr>
         </thead>
         <tbody>
-          {bloodBanks.map((bloodBank, index) => (
-            <tr key={index} onClick={() => handleRowClick(bloodBank)}>
-              <th scope="row">{index + 1}</th>
-              <td>{bloodBank.name}</td>
-              <td>{bloodBank.phone}</td>
-              <td>
-                <button className="btn btn-link" type="button">
-                  Click for more info
-                </button>
-              </td>
-            </tr>
-          ))}
+          {loading ? (
+            [...Array(banksPerPage)].map((_, index) => (
+              <tr key={index}>
+                <td><Skeleton height={30} /></td>
+                <td><Skeleton height={30} /></td>
+                <td><Skeleton height={30} /></td>
+                <td><Skeleton height={30} /></td>
+              </tr>
+            ))
+          ) : (
+            bloodBanks.map((bloodBank, index) => (
+              <tr key={index} onClick={() => handleRowClick(bloodBank)}>
+                <th scope="row">{(currentPage - 1) * banksPerPage + index + 1}</th>
+                <td>{bloodBank.name}</td>
+                <td>{bloodBank.phone}</td>
+                <td>
+                  <button className="btn btn-link" type="button">
+                    Click for more info
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
+
+      {!loading && (
+        <div className="d-flex justify-content-between mt-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1 || loading}
+            className="btn btn-danger"
+          >
+            Previous
+          </button>
+          <span className="align-self-center">Page {currentPage} of {totalPages}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages || loading}
+            className="btn btn-danger"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      {/* Blur overlay */}
+      {showModal && <div className="modal-overlay show" />}
 
       {/* Modal */}
       {selectedBloodBank && (
         <div
-          className={`modal fade ${showModal ? "show" : ""}`}
+          className={`modal fade ${showModal ? 'show' : ''}`}
           tabIndex="-1"
           role="dialog"
-          style={{ display: showModal ? "block" : "none" }}
+          style={{ display: showModal ? 'block' : 'none' }}
         >
           <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div className="modal-content">

@@ -12,7 +12,14 @@ exports.getBloodBanks = async (req, res) => {
       filter = { city: city };
     }
 
-    const bloodBanks = await BloodBank.find(filter);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalBloodBanks = await BloodBank.countDocuments(filter);
+    const bloodBanks = await BloodBank.find(filter).skip(skip).limit(limit);
+    const totalPages = Math.ceil(totalBloodBanks / limit);
+
     const citys = await City.find();
     const cordinates = await Cordinates.find();
 
@@ -22,12 +29,18 @@ exports.getBloodBanks = async (req, res) => {
       cities.push(city.toJSON().city);
     }
 
-    res.json({ bloodBanks, cities, cordinates });
+    res.json({
+      bloodBanks,
+      cities,
+      cordinates,
+      pagination: { totalPages, currentPage: page },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error retrieving blood banks');
   }
 };
+
 
 exports.addBloodBank = (req, res) => {
   const { name, district, city, address, pincode, phone } = req.body;

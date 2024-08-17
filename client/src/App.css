@@ -660,3 +660,60 @@ body {
   content:"Loading..."
 }
 @keyframes l7 {to{background-position: left}}
+
+
+/* For Modal */
+
+/* Class to prevent scrolling on the body when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Modal styles as before */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1040;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal.show {
+  z-index: 1050;
+}
+
+.modal-dialog {
+  z-index: 1051;
+}
+
+.modal-content {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid #dc3545;
+}
+
+.modal-header {
+  background-color: #dc3545;
+  color: #fff;
+  border-bottom: 1px solid #dc3545;
+}
+
+.modal-footer {
+  border-top: 1px solid #dc3545;
+}
+
+.modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
