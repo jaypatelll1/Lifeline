@@ -2,7 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css'; // Import the skeleton styles
+import 'react-loading-skeleton/dist/skeleton.css';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Table = () => {
   const [bloodDonors, setBloodDonors] = useState([]);
@@ -17,8 +18,8 @@ const Table = () => {
       setLoading(true); // Set loading to true before starting data fetch
       try {
         const apiUrl = cityId
-          ? `http://localhost:9000/donors/check/${cityId}?page=${currentPage}&limit=${donorsPerPage}`
-          : `http://localhost:9000/donors/check?page=${currentPage}&limit=${donorsPerPage}`;
+          ? `${BASE_URL}/donors/check/${cityId}?page=${currentPage}&limit=${donorsPerPage}`
+          : `${BASE_URL}/donors/check?page=${currentPage}&limit=${donorsPerPage}`;
 
         const response = await axios.get(apiUrl);
         setBloodDonors(response.data.bloodDonors);

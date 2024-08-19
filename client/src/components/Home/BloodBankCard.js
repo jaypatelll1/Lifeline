@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Card, Col, Row, Image } from 'react-bootstrap';
 import bloodBankSymbol from "../../assets/blood-bank-symbol.png";
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';

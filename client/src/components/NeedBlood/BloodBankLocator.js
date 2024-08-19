@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -14,7 +15,7 @@ const BloodBankLocator = (props) => {
 
   useEffect(() => {
     // Fetch cities
-    axios.get("http://localhost:9000/donors/check/cities")
+    axios.get(BASE_URL + "/donors/check/cities")
       .then((response) => {
         // Ensure cities is an array
         const fetchedCities = response.data?.cities || [];
@@ -32,7 +33,7 @@ const BloodBankLocator = (props) => {
   }, [cityId]);
 
   const fetchMarkers = (city) => {
-    axios.get(`http://localhost:9000/donors/check/markers/${city}`)
+    axios.get(`${BASE_URL}/donors/check/markers/${city}`)
       .then((response) => {
         // Ensure coordinates is an array
         const fetchedCoordinates = response.data?.cordinates || [];

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button, Image } from 'react-bootstrap';
+import { Container, Image } from 'react-bootstrap';
 import HeroImage from '../../assets/NeedBloodPageBanner.jpg';
 
 const Hero = () => {

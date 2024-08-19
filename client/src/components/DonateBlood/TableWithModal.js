@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const TableWithModal = () => {
   const [bloodBanks, setBloodBanks] = useState([]);
@@ -12,16 +13,17 @@ const TableWithModal = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [banksPerPage] = useState(10);
-
   const { cityId } = useParams();
+
+  console.log(BASE_URL)
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const apiUrl = cityId
-          ? `http://localhost:9000/bloodbanks/op/${cityId}?page=${currentPage}&limit=${banksPerPage}`
-          : `http://localhost:9000/bloodbanks/op?page=${currentPage}&limit=${banksPerPage}`;
+          ? `${BASE_URL}/bloodbanks/op/${cityId}?page=${currentPage}&limit=${banksPerPage}`
+          : `${BASE_URL}/bloodbanks/op?page=${currentPage}&limit=${banksPerPage}`;
 
         const response = await axios.get(apiUrl);
         setBloodBanks(response.data.bloodBanks);

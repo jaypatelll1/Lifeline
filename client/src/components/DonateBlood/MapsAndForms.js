@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -57,7 +58,7 @@ const MapsAndForms = (props) => {
   const [bloodBanks, setBloodBanks] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:9000/donors/check/cities").then((response) => {
+    axios.get(BASE_URL + "/donors/check/cities").then((response) => {
       setCities(response.data.cities);
     });
   }, []);
@@ -70,8 +71,8 @@ const MapsAndForms = (props) => {
 
   useEffect(() => {
     const apiUrl = cityId
-      ? `http://localhost:9000/bloodbanks/op/${cityId}`
-      : "http://localhost:9000/bloodbanks/op";
+      ? `${BASE_URL}/bloodbanks/op/${cityId}`
+      : BASE_URL + "/bloodbanks/op";
 
     axios.get(apiUrl)
       .then((response) => {

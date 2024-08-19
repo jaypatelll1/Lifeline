@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function GetDonorInfoForm() {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ export default function GetDonorInfoForm() {
     try {
       // Make POST request using Axios
       const response = await axios.post(
-        "http://localhost:9000/form/submit",
+        BASE_URL + "/form/submit",
         formData
       );
       console.log(response.data); // Log the response from the server

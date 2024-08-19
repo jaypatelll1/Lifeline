@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Image, Button } from 'react-bootstrap';
+import { Container, Image } from 'react-bootstrap';
 import MainLeft from '../../assets/MainLeftBanner.png';
 import MainRight from '../../assets/MainRightBanner.png';
 
